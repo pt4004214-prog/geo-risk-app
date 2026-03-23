@@ -738,9 +738,9 @@ def weather():
     lon=float(request.args.get("lon"))
 
     return jsonify(weather_forecast(lat,lon))
-def open_browser():
-    webbrowser.open("http://127.0.0.1:5000")
+    
+import os
 
 if __name__=="__main__":
-    threading.Timer(1,open_browser).start()
-    app.run(debug=False)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
