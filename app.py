@@ -647,7 +647,7 @@ pixelOffset:new Cesium.Cartesian2(0,-40)
 
 
 
-fetch(`/data?lat=${lat}&lon=${lon}`)
+fetch(window.location.origin + `/data?lat=${lat}&lon=${lon}`)
 .then(r=>r.json())
 .then(d=>{
 viewer.entities.remove(loader)
@@ -681,7 +681,7 @@ d.place+"\\n\\n"+
 "SLOPE: "+d.slope+"°\\n"+
 "SOIL: "+d.soil+"\\n"+
 "QUAKES: "+d.quakes+"\\n"+
-"FUTURE RISK:"+d.future[0].risk+"%\\n"+
+"FUTURE RISK:"+(d.future && d.future.length ? d.future[0].risk : "N/A")+"%\\n"+
 "FLOOD: "+d.flood,
 font:"13px monospace",
 fillColor:Cesium.Color.WHITE,
