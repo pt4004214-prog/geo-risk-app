@@ -323,18 +323,18 @@ html = """
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cesium.com/downloads/cesiumjs/releases/1.111/Build/Cesium/Cesium.js"></script>
 <link href="https://cesium.com/downloads/cesiumjs/releases/1.111/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <style>
-html,body{margin:0;height:100%;background:#050510;color:#00ffff;font-family:Orbitron,Segoe UI}
+html,body {
+    margin: 0;
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+background:#050510;color:#00ffff;font-family:Orbitron,Segoe UI}
 #map{width:100%;height:100%}
 
 /* SCI FI BRAND */
 #brand{
-position:absolute;
-top:20px;
-left:20px;
-z-index:9999;
-padding:10px 20px;
+ top:calc(20px + env(safe-area-inset-top));
 background:rgba(0,0,30,0.7);
 border:1px solid #00ffff;
 border-radius:30px;
@@ -344,9 +344,7 @@ letter-spacing:2px;
 
 /* HUD COORDS */
 #coordsBar{
-position:absolute;
-top:20px;
-left:50%;
+ top:calc(20px + env(safe-area-inset-top));
 transform:translateX(-50%);
 background:rgba(0,0,0,0.6);
 padding:6px 15px;
