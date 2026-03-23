@@ -323,13 +323,15 @@ html = """
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cesium.com/downloads/cesiumjs/releases/1.111/Build/Cesium/Cesium.js"></script>
 <link href="https://cesium.com/downloads/cesiumjs/releases/1.111/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <style>
 html,body {
     margin: 0;
     padding-top: env(safe-area-inset-top);
     padding-bottom: env(safe-area-inset-bottom);
-background:#050510;color:#00ffff;font-family:Orbitron,Segoe UI}
+background:#050510;color:#00ffff;font-family:Orbitron,Segoe UI
+overflow:hidden;
+}
 #map{width:100%;height:100%}
 
 /* SCI FI BRAND */
@@ -465,7 +467,12 @@ box-shadow:0 0 10px #00ffff;
 # #sidePanel.active{
 # right:0;
 # }
-
+#app {
+    width: 1920px;
+    height: 1080px;
+    transform-origin: top left;
+    position: relative;
+}
 # canvas{
 # width:100% !important;
 # height:180px !important;
@@ -473,6 +480,7 @@ box-shadow:0 0 10px #00ffff;
 </style>
 </head>
 <body>
+<div id= "app">
 
 <div id="brand">
     ⚡ PRAVEEN GEO LAB ⚡
@@ -711,9 +719,20 @@ markerMap={};
 this.style.display="none";
 };
 
+function scaleApp() {
+    let scaleX = window.innerWidth / 1920;
+    let scaleY = window.innerHeight / 1080;
 
+    let scale = Math.min(scaleX, scaleY);
+
+    document.getElementById("app").style.transform = "scale(" + scale + ")";
+}
+
+window.addEventListener("resize", scaleApp);
+window.onload = scaleApp;
 
 </script>
+</div>
 </body>
 </html>
 """
