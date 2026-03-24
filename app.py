@@ -351,6 +351,7 @@ z-index:9999;
 
 /* HUD COORDS */
 #coordsBar{
+position:absolute;
  top:calc(20px + env(safe-area-inset-top));
 transform:translateX(-50%);
 background:rgba(0,0,0,0.6);
