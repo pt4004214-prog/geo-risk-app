@@ -353,6 +353,7 @@ z-index:9999;
 /* HUD COORDS */
 #coordsBar{
 position:absolute;
+left:50%
  top:calc(20px + env(safe-area-inset-top));
 transform:translateX(-50%);
 background:rgba(0,0,0,0.6);
@@ -412,7 +413,7 @@ text-shadow:0 0 8px #ff00ff;
 }
 
 .spinLoader{
-
+position:absolute;
 width:26px;
 height:26px;
 
@@ -572,7 +573,25 @@ outlineWidth:2
 }
 
 // HUD COORDS
-viewer.screenSpaceEventHandler.setInputAction(function(m){
+viewer.screenSpaceEventHandler.setInputAction(function(click){
+
+var rect = viewer.canvas.getBoundingClientRect();
+
+// 👉 correct scaled click
+var x = (click.position.x - rect.left) * (viewer.canvas.width / rect.width);
+var y = (click.position.y - rect.top) * (viewer.canvas.height / rect.height);
+
+var pos = viewer.scene.pickPosition(new Cesium.Cartesian2(x, y));
+if(!pos){
+    var ray = viewer.camera.getPickRay(new Cesium.Cartesian2(x,y));
+    pos = viewer.scene.globe.pick(ray, viewer.scene);
+}
+if(!pos) return;
+
+var c = Cesium.Cartographic.fromCartesian(pos);
+
+var lat = Cesium.Math.toDegrees(c.latitude);
+var lon = Cesium.Math.toDegrees(c.longitude);
 var ray=viewer.camera.getPickRay(m.endPosition);
 var pos=viewer.scene.globe.pick(ray,viewer.scene);
 if(!pos)return;
