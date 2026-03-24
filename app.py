@@ -324,6 +324,7 @@ html = """
 <script src="https://cesium.com/downloads/cesiumjs/releases/1.111/Build/Cesium/Cesium.js"></script>
 <link href="https://cesium.com/downloads/cesiumjs/releases/1.111/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
 <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+
 <style>
 html,body {
     margin: 0;
@@ -504,6 +505,9 @@ box-shadow:0 0 10px #00ffff;
 
 
 <script>
+if (navigator.hardwareConcurrency <= 4 || navigator.deviceMemory <= 2) {
+    window.location.href = "/lite";
+}
 
 Cesium.Ion.defaultAccessToken="%TOKEN%";
 
@@ -511,13 +515,19 @@ var viewer=new Cesium.Viewer("map",{
 
 terrainProvider:new Cesium.EllipsoidTerrainProvider(),
 
-animation:true,
+animation:false,
 
-timeline:true,
+maximumRenderTimeChange:Infinity,
+
+requestRenderMode:true,
+
+shadows:false,
+
+timeline:false,
 
 baseLayerPicker:true,
 
-geocoder:true,
+geocoder:false,
 
 sceneModePicker:true,
 
@@ -526,7 +536,7 @@ homeButton:true
 
 });
 
-viewer.scene.globe.enableLighting=true;
+viewer.scene.globe.enableLighting=false;
 
 var markers=[];
 var rainChart = null;
@@ -621,6 +631,7 @@ outlineColor:Cesium.Color.WHITE
 }
 
 });
+
 // PULSE ANIMATION
 
 var pulse = viewer.clock.onTick.addEventListener(function(){
@@ -726,17 +737,27 @@ this.style.display="none";
 };
 
 function scaleApp() {
-    let scaleX = window.innerWidth / 1920;
-    let scaleY = window.innerHeight / 1080;
+
+    let baseWidth = 1920;
+    let baseHeight = 1080;
+
+    // 📱 if phone vertical → swap dimensions
+    if (window.innerHeight > window.innerWidth) {
+        baseWidth = 1080;
+        baseHeight = 1920;
+    }
+
+    let scaleX = window.innerWidth / baseWidth;
+    let scaleY = window.innerHeight / baseHeight;
 
     let scale = Math.min(scaleX, scaleY);
 
-    document.getElementById("app").style.transform = "scale(" + scale + ")";
+    document.getElementById("app").style.transform =
+        "scale(" + scale + ")";
 }
 
 window.addEventListener("resize", scaleApp);
 window.onload = scaleApp;
-
 </script>
 </div>
 </body>
@@ -753,6 +774,18 @@ def data():
     lat=float(request.args.get("lat"))
     lon=float(request.args.get("lon"))
     return jsonify(calculate_risk(lat,lon))
+
+
+@app.route("/lite")
+def lite():
+    return """
+    <html>
+    <body style="background:black;color:white;text-align:center;margin-top:50%">
+    <h2>⚠️ Low Device Mode</h2>
+    <p>Simple version loaded</p>
+    </body>
+    </html>
+    """
 
 @app.route("/weather")
 def weather():
