@@ -336,12 +336,17 @@ overflow:hidden;
 
 /* SCI FI BRAND */
 #brand{
- top:calc(20px + env(safe-area-inset-top));
+position:absolute;   /* 👈 sabse important */
+left:20px;           /* 👈 left corner */
+top:calc(20px + env(safe-area-inset-top));
+
 background:rgba(0,0,30,0.7);
 border:1px solid #00ffff;
 border-radius:30px;
 box-shadow:0 0 20px #00ffff;
 letter-spacing:2px;
+padding:10px 18px;
+z-index:9999;
 }
 
 /* HUD COORDS */
