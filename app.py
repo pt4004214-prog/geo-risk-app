@@ -470,36 +470,14 @@ border-radius:8px;
 box-shadow:0 0 10px #00ffff;
 }
 
-# #sidePanel{
-# position:absolute;
-# top:0;
-# right:-320px;
-# width:300px;
-# height:100%;
-# background:rgba(0,0,0,0.95);
-# border-left:1px solid #00ffff;
-# padding:15px;
-# transition:0.3s;
-# z-index:9998;
-# overflow-y:auto;
-# }
 
-# #sidePanel.active{
-# right:0;
-# }
-# #sidePanel.active{
-# right:0;
-# }
 #app {
     width: 1920px;
     height: 1080px;
     transform-origin: top left;
     position: relative;
 }
-# canvas{
-# width:100% !important;
-# height:180px !important;
-# }
+
 #brand, #coordsBar, #locBtn, #clearBtn{
     backdrop-filter: blur(6px);
 }
