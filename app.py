@@ -536,7 +536,7 @@ homeButton:true
 viewer.scene.globe.enableLighting=false;
 viewer.scene.pickTranslucentDepth=true;
 var markers=[];
-var rainChart = null;
+
 var rainChart = null;
 
 var markerMap={}
@@ -751,12 +751,7 @@ markerMap={};
 this.style.display="none";
 };
 
-
-
-# window.addEventListener("resize", scaleApp);
-# window.onload = scaleApp;
 </script>
-</div>
 </body>
 </html>
 """
