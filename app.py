@@ -506,7 +506,7 @@ box-shadow:0 0 10px #00ffff;
 </style>
 </head>
 <body>
-# <div id= "app">
+<!-- <div id= "app">-->
 
 <div id="brand">
     ⚡ PRAVEEN GEO LAB ⚡
@@ -773,25 +773,25 @@ markerMap={};
 this.style.display="none";
 };
 
-# function scaleApp() {
+//function scaleApp() {
 
-#     let baseWidth = 1920;
-#     let baseHeight = 1080;
+//     let baseWidth = 1920;
+//    let baseHeight = 1080;
 
-#     // 📱 if phone vertical → swap dimensions
-#     if (window.innerHeight > window.innerWidth) {
-#         baseWidth = 1080;
-#         baseHeight = 1920;
-#     }
+  // 📱 if phone vertical → swap dimensions
+//    if (window.innerHeight > window.innerWidth) {
+//         baseWidth = 1080;
+//        baseHeight = 1920;
+//    }
 
-#     let scaleX = window.innerWidth / baseWidth;
-#     let scaleY = window.innerHeight / baseHeight;
+//    let scaleX = window.innerWidth / baseWidth;
+//    let scaleY = window.innerHeight / baseHeight;
 
-#     let scale = Math.min(scaleX, scaleY);
+//    let scale = Math.min(scaleX, scaleY);
 
-#     document.getElementById("app").style.transform =
-#         "scale(" + scale + ")";
-# }
+//    document.getElementById("app").style.transform =
+//        "scale(" + scale + ")";
+//}
 
 # window.addEventListener("resize", scaleApp);
 # window.onload = scaleApp;
