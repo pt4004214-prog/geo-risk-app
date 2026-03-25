@@ -556,7 +556,7 @@ homeButton:true
 });
 
 viewer.scene.globe.enableLighting=false;
-
+viewer.scene.pickTranslucentDepth=true;
 var markers=[];
 var rainChart = null;
 var rainChart = null;
