@@ -344,8 +344,8 @@ html, body {
 /* SCI FI BRAND */
 #brand{
 position:absolute;   /* 👈 sabse important */
-left:20px;           /* 👈 left corner */
-top:15px;
+left:7px;           /* 👈 left corner */
+top:7px;
 
 background:rgba(0,0,30,0.7);
 border:1px solid #00ffff;
@@ -360,12 +360,12 @@ z-index:9999;
 #coordsBar{
 position:absolute;
 left:50%;
-top:15px;
+top:30px;
 transform:translateX(-50%);
 background:rgba(0,0,0,0.6);
-padding:6px 15px;
+padding:6px 10px;
 border:1px solid #00ffff;
-border-radius:20px;
+border-radius:15px;
 box-shadow:0 0 10px #00ffff;
 z-index:9999;
 }
@@ -487,6 +487,7 @@ box-shadow:0 0 10px #00ffff;
 <!-- <div id= "app">-->
 
 <div id="brand">
+
     ⚡ PRAVEEN GEO LAB ⚡
     <div id="insta">
         <a href="https://instagram.com/___thakur_77___" target="_blank">
@@ -508,10 +509,17 @@ if (navigator.hardwareConcurrency <= 4 || navigator.deviceMemory <= 2) {
 
 Cesium.Ion.defaultAccessToken="%TOKEN%";
 
+var scale = 0.8;
+
+if (navigator.deviceMemory && navigator.deviceMemory <= 2) {
+    scale = 0.5;
+}
 var viewer=new Cesium.Viewer("map",{
 
-terrainProvider:new Cesium.EllipsoidTerrainProvider(),
+terrainProvider: Cesium.createWorldTerrain(),
 
+baseLayerPicker: false,
+imageryProvider: new Cesium.IonImageryProvider({ assetId: 2 }),
 animation:false,
 
 maximumRenderTimeChange:Infinity,
@@ -524,11 +532,12 @@ timeline:false,
 
 baseLayerPicker:true,
 
-geocoder:false,
+geocoder:true,
 
 sceneModePicker:true,
 
 navigationHelpButton:false,
+resollutionScale:scale,
 homeButton:true
 
 });
