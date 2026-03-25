@@ -326,20 +326,26 @@ html = """
 <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 
 <style>
-html,body {
+html, body {
     margin: 0;
-    padding-top: env(safe-area-inset-top);
-    padding-bottom: env(safe-area-inset-bottom);
-background:#050510;color:#00ffff;font-family:Orbitron,Segoe UI
-overflow:hidden;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
 }
-#map{width:100%;height:100%}
 
+#map {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+}
 /* SCI FI BRAND */
 #brand{
 position:absolute;   /* 👈 sabse important */
 left:20px;           /* 👈 left corner */
-top:calc(20px + env(safe-area-inset-top));
+top:15px;
 
 background:rgba(0,0,30,0.7);
 border:1px solid #00ffff;
@@ -353,8 +359,8 @@ z-index:9999;
 /* HUD COORDS */
 #coordsBar{
 position:absolute;
-left:50%
- top:calc(20px + env(safe-area-inset-top));
+left:50%;
+top:15px;
 transform:translateX(-50%);
 background:rgba(0,0,0,0.6);
 padding:6px 15px;
@@ -429,6 +435,15 @@ animation:spin 1s linear infinite;
 0%{transform:translate(-50%,-50%) rotate(0deg)}
 100%{transform:translate(-50%,-50%) rotate(360deg)}
 }
+
+@media (orientation: portrait){
+    #brand { font-size: 12px; }
+}
+
+@media (orientation: landscape){
+    #brand { font-size: 14px; }
+}
+
 #locBtn{
 position:absolute;
 bottom:90px;
@@ -485,10 +500,13 @@ box-shadow:0 0 10px #00ffff;
 # width:100% !important;
 # height:180px !important;
 # }
+#brand, #coordsBar, #locBtn, #clearBtn{
+    backdrop-filter: blur(6px);
+}
 </style>
 </head>
 <body>
-<div id= "app">
+# <div id= "app">
 
 <div id="brand">
     ⚡ PRAVEEN GEO LAB ⚡
@@ -572,48 +590,48 @@ outlineWidth:2
 
 }
 
-// HUD COORDS
+// ===== HUD COORDS =====
+viewer.screenSpaceEventHandler.setInputAction(function(m){
+
+var ray = viewer.camera.getPickRay(m.endPosition);
+var pos = viewer.scene.globe.pick(ray, viewer.scene);
+
+if(!pos) return;
+
+var c = Cesium.Cartographic.fromCartesian(pos);
+
+document.getElementById("coordsBar").innerHTML =
+"LAT " + Cesium.Math.toDegrees(c.latitude).toFixed(4) +
+" | LON " + Cesium.Math.toDegrees(c.longitude).toFixed(4);
+
+}, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
+
+// CLICK SCAN
 viewer.screenSpaceEventHandler.setInputAction(function(click){
 
 var rect = viewer.canvas.getBoundingClientRect();
 
-// 👉 correct scaled click
+// ✅ FIXED CLICK POSITION (MOBILE SAFE)
 var x = (click.position.x - rect.left) * (viewer.canvas.width / rect.width);
 var y = (click.position.y - rect.top) * (viewer.canvas.height / rect.height);
 
+// TRY DIRECT PICK
 var pos = viewer.scene.pickPosition(new Cesium.Cartesian2(x, y));
+
+// 🔁 FALLBACK (VERY IMPORTANT)
 if(!pos){
     var ray = viewer.camera.getPickRay(new Cesium.Cartesian2(x,y));
     pos = viewer.scene.globe.pick(ray, viewer.scene);
 }
+
 if(!pos) return;
 
 var c = Cesium.Cartographic.fromCartesian(pos);
 
 var lat = Cesium.Math.toDegrees(c.latitude);
 var lon = Cesium.Math.toDegrees(c.longitude);
-var ray=viewer.camera.getPickRay(m.endPosition);
-var pos=viewer.scene.globe.pick(ray,viewer.scene);
-if(!pos)return;
-var c=Cesium.Cartographic.fromCartesian(pos);
-document.getElementById("coordsBar").innerHTML=
-"LAT "+Cesium.Math.toDegrees(c.latitude).toFixed(4)+
-" | LON "+Cesium.Math.toDegrees(c.longitude).toFixed(4);
-},Cesium.ScreenSpaceEventType.MOUSE_MOVE);
 
-
-// CLICK SCAN
-viewer.screenSpaceEventHandler.setInputAction(function(click){
-
-var ray=viewer.camera.getPickRay(click.position);
-var pos=viewer.scene.globe.pick(ray,viewer.scene);
-if(!pos)return;
-
-var c=Cesium.Cartographic.fromCartesian(pos);
-var lat=Cesium.Math.toDegrees(c.latitude);
-var lon=Cesium.Math.toDegrees(c.longitude);
-var key = lat.toFixed(4)+"_"+lon.toFixed(4)
-
+var key = lat.toFixed(4)+"_"+lon.toFixed(4);
 if(markerMap[key]){
 
 viewer.entities.remove(markerMap[key])
@@ -755,28 +773,28 @@ markerMap={};
 this.style.display="none";
 };
 
-function scaleApp() {
+# function scaleApp() {
 
-    let baseWidth = 1920;
-    let baseHeight = 1080;
+#     let baseWidth = 1920;
+#     let baseHeight = 1080;
 
-    // 📱 if phone vertical → swap dimensions
-    if (window.innerHeight > window.innerWidth) {
-        baseWidth = 1080;
-        baseHeight = 1920;
-    }
+#     // 📱 if phone vertical → swap dimensions
+#     if (window.innerHeight > window.innerWidth) {
+#         baseWidth = 1080;
+#         baseHeight = 1920;
+#     }
 
-    let scaleX = window.innerWidth / baseWidth;
-    let scaleY = window.innerHeight / baseHeight;
+#     let scaleX = window.innerWidth / baseWidth;
+#     let scaleY = window.innerHeight / baseHeight;
 
-    let scale = Math.min(scaleX, scaleY);
+#     let scale = Math.min(scaleX, scaleY);
 
-    document.getElementById("app").style.transform =
-        "scale(" + scale + ")";
-}
+#     document.getElementById("app").style.transform =
+#         "scale(" + scale + ")";
+# }
 
-window.addEventListener("resize", scaleApp);
-window.onload = scaleApp;
+# window.addEventListener("resize", scaleApp);
+# window.onload = scaleApp;
 </script>
 </div>
 </body>
@@ -793,6 +811,7 @@ def data():
     lat=float(request.args.get("lat"))
     lon=float(request.args.get("lon"))
     return jsonify(calculate_risk(lat,lon))
+
 
 
 @app.route("/lite")
