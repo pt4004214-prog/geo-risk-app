@@ -514,11 +514,14 @@ var scale = 0.8;
 if (navigator.deviceMemory && navigator.deviceMemory <= 2) {
     scale = 0.5;
 }
+
 var viewer=new Cesium.Viewer("map",{
 
-terrainProvider: Cesium.createWorldTerrain(),
+terrainProvider: new Cesium.CesiumTerrainProvider({
+    url: Cesium.IonResource.fromAssetId(1)
+}),
 
-baseLayerPicker: false,
+
 imageryProvider: new Cesium.IonImageryProvider({ assetId: 2 }),
 animation:false,
 
@@ -537,13 +540,14 @@ geocoder:true,
 sceneModePicker:true,
 
 navigationHelpButton:false,
-resollutionScale:scale,
+resolutionScale:scale,
 homeButton:true
 
 });
 
 viewer.scene.globe.enableLighting=false;
 viewer.scene.pickTranslucentDepth=true;
+viewer.scene.globe.depthTestAgainstTerrain = false;
 var markers=[];
 
 var rainChart = null;
