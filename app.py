@@ -503,7 +503,7 @@ box-shadow:0 0 10px #00ffff;
 
 
 <script>
-if (navigator.hardwareConcurrency <= 4 || navigator.deviceMemory <= 2) {
+if (navigator.deviceMemory && navigator.deviceMemory <= 2) {
     window.location.href = "/lite";
 }
 
@@ -515,14 +515,20 @@ if (navigator.deviceMemory && navigator.deviceMemory <= 2) {
     scale = 0.5;
 }
 
+var isLow = !navigator.deviceMemory || navigator.deviceMemory < 4;
+
 var viewer=new Cesium.Viewer("map",{
 
-terrainProvider: new Cesium.CesiumTerrainProvider({
+terrainProvider: isLow
+? new Cesium.EllipsoidTerrainProvider()
+: new Cesium.CesiumTerrainProvider({
     url: Cesium.IonResource.fromAssetId(1)
 }),
 
+imageryProvider: isLow
+? new Cesium.OpenStreetMapImageryProvider()
+: new Cesium.IonImageryProvider({ assetId: 2 }),
 
-imageryProvider: new Cesium.IonImageryProvider({ assetId: 2 }),
 animation:false,
 
 maximumRenderTimeChange:Infinity,
@@ -540,7 +546,9 @@ geocoder:true,
 sceneModePicker:true,
 
 navigationHelpButton:false,
-resolutionScale:scale,
+
+resolutionScale:isLow ? 0.5 : 1
+
 homeButton:true
 
 });
